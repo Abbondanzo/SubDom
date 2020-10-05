@@ -1,47 +1,25 @@
-import express from "express";
-import path from "path";
+import { opine } from "../deps.ts";
+import { SubDomConfig } from "../mod.ts";
+import { RedirectProxy } from "./redirectProxy.ts";
+import { setupRouter } from "./router.ts";
 
-import { RedirectProxy } from "./redirectProxy";
+const DEFAULT_PORT = 4300;
 
-const SITE_NAME = "is.abbondanzo.com";
-
-const router = (app: express.Express) => {
-  const redirectProxy = new RedirectProxy({
-    baseUrl: SITE_NAME,
-    writeToFile: false,
-    onError: console.error,
-  });
-
-  // Set some defaults
-  redirectProxy.setRedirect("peter", "https://abbondanzo.com");
-  redirectProxy.setRedirect("matt", "https://mattrb.com/");
-
-  app.get("*", (req, res, next) => {
-    const redirect = redirectProxy.getRedirect(req.headers.host);
-    if (redirect) {
-      console.log(`Found redirect: ${redirect}`);
-      res.redirect(redirect);
-    } else {
-      return next();
-    }
-  });
-
-  app.use("/", (req, res) => {
-    res.render("index");
-  });
-};
-
-const init = (port: number) => {
-  const app = express();
-
-  router(app);
-
-  app.use(express.static(path.join(__dirname, "..", "public")));
-  app.set("views", path.join(__dirname, "views"));
+export const setup = (
+  { baseUrl, writeToFile, port, initialProxies }: SubDomConfig,
+) => {
+  const app = opine();
+  // Use redirect proxy for determining what to do with hosts
+  const redirectProxy = new RedirectProxy(
+    { baseUrl, writeToFile, initialProxies: initialProxies || {} },
+  );
+  // Configure routes
+  const router = setupRouter(redirectProxy);
+  app.use("*", router);
+  // Setup view engine
   app.set("view engine", "ejs");
-
+  // Listen
+  port = port || DEFAULT_PORT;
   console.log(`Listening on port ${port}`);
   app.listen(port);
 };
-
-init(4567);

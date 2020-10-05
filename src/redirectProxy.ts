@@ -1,11 +1,12 @@
 interface RedirectProxyOptions {
   baseUrl: string;
   writeToFile?: boolean;
+  initialProxies?: Proxies;
   onError?: ErrorCallback;
 }
 
 type Url = string;
-type Proxies = {
+export type Proxies = {
   [subdomain: string]: Url;
 };
 type ErrorCallback = (error: any) => void;
@@ -16,10 +17,12 @@ export class RedirectProxy {
   private readonly proxies: Proxies;
   private readonly onError: ErrorCallback;
 
-  constructor({ baseUrl, writeToFile, onError }: RedirectProxyOptions) {
+  constructor(
+    { baseUrl, writeToFile, initialProxies, onError }: RedirectProxyOptions,
+  ) {
     this.baseUrl = baseUrl.toLowerCase();
     this.fileName = writeToFile ? `${this.baseUrl}.config.json` : null;
-    this.proxies = {};
+    this.proxies = initialProxies || {};
     this.onError = onError || noop;
   }
 
