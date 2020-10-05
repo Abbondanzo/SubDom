@@ -2,8 +2,10 @@ import { Request, Response, Router as ServerRouter } from "../deps.ts";
 import { RedirectProxy } from "./redirectProxy.ts";
 
 const handleIndex = (request: Request, response: Response) => {
+  const host = request.headers.get("Host");
+  const hostname = request.hostname;
   console.log(
-    `${new Date()} - Received request from ${request.conn.remoteAddr} - ${request.hostname}`,
+    `${new Date()} - Received request from ${host} - ${hostname}`,
   );
   return response.send("Hello world");
 };
