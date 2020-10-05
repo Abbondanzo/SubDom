@@ -1,9 +1,17 @@
-import { opine } from "../deps.ts";
+import {
+  dirname,
+  join,
+  opine,
+  renderFileToString,
+  serveStatic,
+} from "../deps.ts";
 import { SubDomConfig } from "../mod.ts";
 import { RedirectProxy } from "./redirectProxy.ts";
 import { setupRouter } from "./router.ts";
 
 const DEFAULT_PORT = 4300;
+const VIEW_ENGINE = "ejs";
+const VIEWS_URL = join(dirname(import.meta.url), "views");
 
 export const setup = (
   { baseUrl, writeToFile, port, initialProxies }: SubDomConfig,
@@ -13,11 +21,15 @@ export const setup = (
   const redirectProxy = new RedirectProxy(
     { baseUrl, writeToFile, initialProxies: initialProxies || {} },
   );
+  // Setup view engine
+  app.set("view engine", VIEW_ENGINE);
+  app.set("views", VIEWS_URL);
+  app.engine("ejs", renderFileToString);
+  // Serve static files
+  app.use(serveStatic("public"));
   // Configure routes
   const router = setupRouter(redirectProxy);
   app.use("*", router);
-  // Setup view engine
-  app.set("view engine", "ejs");
   // Listen
   port = port || DEFAULT_PORT;
   console.log(`Listening on port ${port}`);

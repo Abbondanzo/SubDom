@@ -1,0 +1,37 @@
+html,
+body {
+  height: 100%;
+}
+body {
+  background: #eee;
+}
+
+/* Index page */
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.container > * > h1 {
+  font-weight: 900;
+  font-size: 72px;
+  margin-bottom: 0;
+}
+
+/* Error file (i.e. 404) CSS styling */
+
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.error-container h1 {
+  font-weight: 900;
+  font-size: 72px;
+  margin-bottom: 0;
+}

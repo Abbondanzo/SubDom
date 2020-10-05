@@ -4,45 +4,38 @@
     <title>SubDom</title>
     <link
       rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.6.6/antd.min.css"
     />
-    <style>
-      html,
-      body {
-        height: 100%;
-      }
-      body {
-        background: #eee;
-        display: flex;
-        align-items: center;
-      }
-
-      .container {
-        max-width: 600px;
-        padding: 2em;
-      }
-    </style>
+    <link rel="stylesheet" href="/css/style.css" />
   </head>
-  <body>
-    <div class="card container">
+  <body class="container">
+    <div>
       <h1 class="text-center">SubDom</h1>
 
-      <div class="meta-info">
-        <h4>Your subdomain is:</h4>
-        <br />
-        <h1 id="subdomain">Subdomain</h1>
-      </div>
+      <div class="card">
+        <div class="meta-info">
+          <h4>Your subdomain is:</h4>
+        </div>
 
-      <div class="form-label-group">
-        <label for="subdomain">Subdomain</label>
-        <input
-          id="subdomain"
-          class="form-control"
-          type="text"
-          placeholder="i.e. foo.bar"
-          required=""
-          autofocus=""
-        />
+        <div class="ant-divider ant-divider-horizontal" role="separator"></div>
+
+        <div class="ant-row ant-form-item">
+          <div class="ant-form-item-label">
+            <label class="ant-form-item" for="subdomain">Subdomain</label>
+          </div>
+          <div class="ant-form-item-control">
+            <div class="ant-form-item-control-input">
+              <input
+                id="subdomain"
+                class="ant-input"
+                type="text"
+                placeholder="i.e. foo.bar"
+                required=""
+                autofocus=""
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </body>

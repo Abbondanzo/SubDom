@@ -42,6 +42,16 @@ export class RedirectProxy {
     this.updateFile();
   }
 
+  public matchesBaseUrl(url: string): boolean {
+    return url === this.baseUrl;
+  }
+
+  public getBaseUrl(): string {
+    return !this.baseUrl.startsWith("http")
+      ? `https://${this.baseUrl}`
+      : this.baseUrl;
+  }
+
   private parseSubdomain(host: string): string | null {
     const split = host.toLowerCase().split(this.baseUrl);
     if (split.length !== 2 || split[1] !== "") {
