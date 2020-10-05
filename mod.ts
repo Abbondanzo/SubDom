@@ -8,19 +8,4 @@ export interface SubDomConfig {
   initialProxies?: Proxies;
 }
 
-const TEST_ARG = "--test";
-if (Deno.args.includes(TEST_ARG)) {
-  setup(
-    {
-      baseUrl: "is.abbondanzo.com",
-      writeToFile: false,
-      port: 4567,
-      initialProxies: {
-        "peter": "https://abbondanzo.com",
-        "matt": "https://mattrb.com",
-      },
-    },
-  );
-}
-
 export { setup };
