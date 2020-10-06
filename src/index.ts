@@ -10,7 +10,6 @@ import { SubDomConfig } from "../mod.ts";
 import { RedirectProxy } from "./redirectProxy.ts";
 import { AppRouter } from "./router.ts";
 
-const DEFAULT_PORT = 4300;
 const VIEW_ENGINE = "ejs";
 const VIEWS_URL = join(dirname(import.meta.url), "views");
 
@@ -38,7 +37,7 @@ export const setup = (userOptions: SubDomConfig) => {
   // Setup view engine
   app.set("view engine", VIEW_ENGINE);
   app.set("views", VIEWS_URL);
-  app.engine("ejs", renderFileToString);
+  app.engine(".ejs", renderFileToString);
 
   // Serve static files
   app.use(serveStatic("public"));
