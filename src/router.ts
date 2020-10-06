@@ -17,8 +17,8 @@ export class AppRouter {
     this.router = new Router();
 
     this.router.route("*").get(this.handleRedirect);
+    this.router.route("/api/check/:alias").get(this.handleAliasCheck);
     this.router.route("/").get(this.handleIndex);
-    //   this.router.route("/api").all();
     this.router.route("*").get(this.handle404);
   }
 
@@ -42,7 +42,7 @@ export class AppRouter {
     const redirect = this.redirectProxy.getRedirect(host);
     if (redirect) {
       console.log(`Found redirect: ${redirect}`);
-      response.redirect(redirect);
+      response.redirect(redirect + request.originalUrl);
     } else {
       return next();
     }
@@ -83,6 +83,25 @@ export class AppRouter {
     response.setStatus(404).render(
       "404",
       { baseUrl: this.redirectProxy.getBaseUrl() },
+    );
+  };
+
+  /**
+   * Checks that a given alias is contained in the redirect proxy, returns JSON body with 
+   * `hasAlias` value. If true, there is an existing configuration for the given alias.
+   * 
+   * @param request contains alias path parameter
+   * @param response returns JSON body with `hasAlias` value
+   */
+  private handleAliasCheck = (request: Request, response: Response) => {
+    const { alias } = request.params;
+    if (alias === undefined) {
+      return response.setStatus(400).json(
+        { message: "Missing alias parameter" },
+      );
+    }
+    return response.json(
+      { hasAlias: this.redirectProxy.hasAlias(alias) },
     );
   };
 }

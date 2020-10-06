@@ -33,7 +33,7 @@ export const setup = (
 
   // Configure routes
   const router = new AppRouter(redirectProxy);
-  app.use("*", router.getModem());
+  app.use("/", router.getModem());
 
   // Listen
   port = port || DEFAULT_PORT;

@@ -7,7 +7,7 @@ interface RedirectProxyOptions {
 
 type Url = string;
 export type Proxies = {
-  [subdomain: string]: Url;
+  [alias: string]: Url;
 };
 type ErrorCallback = (error: any) => void;
 
@@ -26,17 +26,22 @@ export class RedirectProxy {
     this.onError = onError || noop;
   }
 
+  /**
+   * Given a full hostname with base URL, parse and return a redirect URL if one exists.
+   * 
+   * @param host full host including base URL
+   */
   public getRedirect(host: string): string | null {
-    const subdomain = this.parseSubdomain(host);
+    const subdomain = this.parseHostForAlias(host);
     if (!subdomain) {
       return null;
     }
     return this.proxies[subdomain] || null;
   }
 
-  public setRedirect(subdomain: string, redirect: string) {
+  public setRedirect(alias: string, redirect: string) {
     redirect = this.domainWithProtocol(redirect);
-    this.proxies[subdomain.toLowerCase()] = redirect;
+    this.proxies[alias.toLowerCase()] = redirect;
     this.updateFile();
   }
 
@@ -48,16 +53,20 @@ export class RedirectProxy {
     return `https://${this.baseUrl}`;
   }
 
-  private parseSubdomain(host: string): string | null {
+  public hasAlias(alias: string): boolean {
+    return Boolean(this.proxies[alias]);
+  }
+
+  private parseHostForAlias(host: string): string | null {
     const split = host.toLowerCase().split(this.baseUrl);
     if (split.length !== 2 || split[1] !== "") {
       return null;
     }
-    const subdomain = split[0];
-    if (subdomain.endsWith(".")) {
-      return subdomain.slice(0, -1);
+    const alias = split[0];
+    if (alias.endsWith(".")) {
+      return alias.slice(0, -1);
     }
-    return subdomain;
+    return alias;
   }
 
   private domainWithProtocol(domain: string): string {
