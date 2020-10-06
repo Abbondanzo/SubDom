@@ -39,7 +39,7 @@ const handleIndex = (
   console.log(
     `${new Date()} - Received request from ${host} - ${hostname}`,
   );
-  return response.render("index");
+  return response.render("index", { baseUrl: _redirectProxy.getBaseUrl() });
 };
 
 const handle404 = (_: Request, response: Response) => {

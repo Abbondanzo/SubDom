@@ -7,6 +7,9 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.6.6/antd.min.css"
     />
     <link rel="stylesheet" href="/css/style.css" />
+    <script type="application/javascript">
+      const BASE_URL = "<%= baseUrl %>";
+    </script>
   </head>
   <body class="container">
     <div>
@@ -15,6 +18,7 @@
       <div class="card">
         <div class="meta-info">
           <h4>Your subdomain is:</h4>
+          <h4 id="subdomain-preview"><i>None</i></h4>
         </div>
 
         <div class="ant-divider ant-divider-horizontal" role="separator"></div>
@@ -43,7 +47,12 @@
             <div class="ant-col ant-form-item-control">
               <div class="ant-form-item-control-input">
                 <div class="ant-form-item-control-input-content">
-                  <button type="button" class="ant-btn ant-btn-primary">
+                  <button
+                    type="button"
+                    id="subdomain-submit"
+                    class="ant-btn ant-btn-primary"
+                    disabled=""
+                  >
                     <span>Next</span>
                   </button>
                 </div>
@@ -53,6 +62,6 @@
         </form>
       </div>
     </div>
+    <script type="application/javascript" src="/js/form.js"></script>
   </body>
-  <script></script>
 </html>

@@ -20,7 +20,7 @@ export class RedirectProxy {
   constructor(
     { baseUrl, writeToFile, initialProxies, onError }: RedirectProxyOptions,
   ) {
-    this.baseUrl = baseUrl.toLowerCase();
+    this.baseUrl = baseUrl.toLowerCase().replace(/^https?:\/\//, "");
     this.fileName = writeToFile ? `${this.baseUrl}.config.json` : null;
     this.proxies = initialProxies || {};
     this.onError = onError || noop;
@@ -35,9 +35,7 @@ export class RedirectProxy {
   }
 
   public setRedirect(subdomain: string, redirect: string) {
-    if (!redirect.startsWith("https://")) {
-      redirect = `https://${redirect}`;
-    }
+    redirect = this.domainWithProtocol(redirect);
     this.proxies[subdomain.toLowerCase()] = redirect;
     this.updateFile();
   }
@@ -47,9 +45,7 @@ export class RedirectProxy {
   }
 
   public getBaseUrl(): string {
-    return !this.baseUrl.startsWith("http")
-      ? `https://${this.baseUrl}`
-      : this.baseUrl;
+    return `https://${this.baseUrl}`;
   }
 
   private parseSubdomain(host: string): string | null {
@@ -62,6 +58,14 @@ export class RedirectProxy {
       return subdomain.slice(0, -1);
     }
     return subdomain;
+  }
+
+  private domainWithProtocol(domain: string): string {
+    if (!domain.match(/^https?:\/\//)) {
+      return `https://${domain}`;
+    } else {
+      return domain;
+    }
   }
 
   private updateFile() {
