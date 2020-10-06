@@ -4,7 +4,8 @@ import { Proxies } from "./src/redirectProxy.ts";
 export interface SubDomConfig {
   baseUrl: string;
   port?: number; // Defaults to 4300
-  writeToFile?: boolean;
+  useSSL?: boolean; // Defaults true
+  writeToFile?: boolean; // Defaults false
   initialProxies?: Proxies;
 }
 
