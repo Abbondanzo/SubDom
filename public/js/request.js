@@ -50,13 +50,17 @@ const saveRedirect = (alias, redirect, callback) => {
   }
   fetch(`${BASE_URL}/api/submit`, {
     headers: { "content-type": "application/json" },
-    body: {
-      alias,
-      redirect,
-    },
+    body: JSON.stringify({ alias, redirect }),
     method: "POST",
   })
-    .then((response) => response.json())
-    .then(({ hasAlias }) => callback(hasAlias))
+    .then(async (response) => {
+      const body = await response.json();
+      if (response.ok) {
+        return body;
+      } else {
+        throw body;
+      }
+    })
+    .then((response) => callback(response))
     .catch((err) => callback(null, err));
 };

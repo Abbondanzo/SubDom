@@ -1,6 +1,7 @@
 export { dirname, join } from "https://deno.land/std@0.65.0/path/mod.ts";
 export { renderFileToString } from "https://deno.land/x/dejs@0.8.0/mod.ts";
 export {
+  json,
   opine,
   request,
   Router,

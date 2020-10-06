@@ -18,6 +18,7 @@ export class AppRouter {
 
     this.router.route("*").get(this.handleRedirect);
     this.router.route("/api/check/:alias").get(this.handleAliasCheck);
+    this.router.route("/api/submit").post(this.handleRedirectSubmit);
     this.router.route("/").get(this.handleIndex);
     this.router.route("*").get(this.handle404);
   }
@@ -96,12 +97,48 @@ export class AppRouter {
   private handleAliasCheck = (request: Request, response: Response) => {
     const { alias } = request.params;
     if (alias === undefined) {
-      return response.setStatus(400).json(
-        { message: "Missing alias parameter" },
-      );
+      return this.errorResponse(response, "Missing alias parameter");
     }
     return response.json(
       { hasAlias: this.redirectProxy.hasAlias(alias) },
     );
   };
+
+  /**
+   * Takes a given alias and redirect, and saves their value to the proxy if allowed.
+   * 
+   * @param request contains alias and redirect body
+   * @param response returns JSON body with alias and redirect values
+   */
+  private handleRedirectSubmit = (request: Request, response: Response) => {
+    const { alias, redirect } = request.parsedBody;
+    if (alias === undefined || redirect === undefined) {
+      return this.errorResponse(response, "Missing body parameter");
+    }
+    if (this.redirectProxy.hasAlias(alias)) {
+      return this.errorResponse(
+        response,
+        "An alias of this value already exists",
+      );
+    }
+    if (alias === "") {
+      return this.errorResponse(
+        response,
+        "You can't use the base URL as the alias",
+      );
+    }
+    const baseUrl = this.redirectProxy.getBaseUrl();
+    if (redirect.endsWith(baseUrl)) {
+      return this.errorResponse(
+        response,
+        "You cannot redirect to this website",
+      );
+    }
+    this.redirectProxy.setRedirect(alias, redirect);
+    return response.json({ [alias]: redirect });
+  };
+
+  private errorResponse(response: Response, message: string) {
+    return response.setStatus(400).json({ message });
+  }
 }

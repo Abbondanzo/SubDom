@@ -1,6 +1,7 @@
 import {
   dirname,
   join,
+  json,
   opine,
   renderFileToString,
   serveStatic,
@@ -23,6 +24,9 @@ const defaultOptions: Required<SubDomConfig> = {
 
 export const setup = (userOptions: SubDomConfig) => {
   const app = opine();
+
+  // Use JSON body-parser for parsing requests
+  app.use(json());
 
   const options: Required<SubDomConfig> = { ...defaultOptions, ...userOptions };
 

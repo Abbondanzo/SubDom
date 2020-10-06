@@ -9,7 +9,7 @@
     <script type="application/javascript" src="/js/request.js"></script>
   </head>
   <body class="container">
-    <div>
+    <div class="contents">
       <h1 class="text-center">SubDom</h1>
 
       <div class="card">
@@ -40,7 +40,7 @@
                   autofocus=""
                   value=""
                 />
-                <span id="alias-error" class="error-text"></span>
+                <span id="alias-error" class="error-text hidden"></span>
               </div>
             </div>
 
@@ -75,7 +75,7 @@
                   required=""
                   value=""
                 />
-                <span id="redirect-error" class="error-text"></span>
+                <span id="redirect-error" class="error-text hidden"></span>
               </div>
             </div>
 
@@ -93,6 +93,10 @@
             </div>
           </div>
         </form>
+
+        <button type="button" id="make-another-alias" class="btn hidden">
+          <span>Make Another Alias</span>
+        </button>
       </div>
     </div>
     <script type="application/javascript" src="/js/form.js"></script>

@@ -73,10 +73,30 @@ a:active {
   text-align: center;
 }
 
+.contents {
+  width: 400px;
+}
+
+@media screen and (max-width: 400px) {
+  .contents {
+    width: 100%;
+  }
+}
+
 .container > * > h1 {
   font-weight: 900;
   font-size: 72px;
   margin-bottom: 0;
+}
+
+@media screen and (max-width: 400px) {
+  .container > * > h1 {
+    font-size: 48px;
+  }
+}
+
+.meta-info {
+  word-wrap: break-word;
 }
 
 .divider {

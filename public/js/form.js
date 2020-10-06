@@ -5,6 +5,18 @@ console.assert(Boolean(BASE_URL), "Global variable BASE_URL is not defined");
  */
 const SUBDOMAIN_PREVIEW = document.getElementById("subdomain-preview");
 /**
+ * @type {HTMLHeadingElement}
+ */
+const SUBDOMAIN_FUTURE = document.getElementById("subdomain-future");
+/**
+ * @type {HTMLHeadingElement}
+ */
+const SUBDOMAIN_CURRENT = document.getElementById("subdomain-current");
+/**
+ * @type {HTMLButtonElement}
+ */
+const MAKE_ANOTHER_ALIAS = document.getElementById("make-another-alias");
+/**
  * Hidden input beneath the preview so we don't have to recompute.
  *
  * @type {HTMLInputElement}
@@ -17,6 +29,10 @@ const ALIAS = document.getElementById("alias");
  * ================================
  */
 
+/**
+ * @type {HTMLDivElement}
+ */
+const FORM_STEP_1 = document.getElementById("form-step-1");
 /**
  * @type {HTMLInputElement}
  */
@@ -173,8 +189,10 @@ const REDIRECT_ERROR = document.getElementById("redirect-error");
 const REDIRECT_SUBMIT = document.getElementById("redirect-submit");
 
 /**
+ * Returns a redirect string if valid, with the HTTP/S protocol removed, null if invalid.
  *
  * @param {string} redirect
+ * @returns {string | null}
  */
 const toValidRedirect = (redirect) => {
   redirect = removeProtocol(redirect);
@@ -185,30 +203,61 @@ const toValidRedirect = (redirect) => {
   return null;
 };
 
+/**
+ * Called after
+ */
 const step2Setup = () => {
   showElement(FORM_STEP_2);
   REDIRECT_SUBMIT.disabled = !toValidRedirect(REDIRECT_INPUT.value);
 };
 
+/**
+ * Called whenever the redirect input changes.
+ *
+ * @param {string} value
+ */
 const handleRedirectValue = (value) => {
   hideElement(REDIRECT_ERROR);
   const redirect = toValidRedirect(value);
   REDIRECT_SUBMIT.disabled = !redirect;
 };
 
+/**
+ * When a user clicks on the "Save" button
+ */
 const onRedirectSubmit = () => {
   const alias = ALIAS.value;
   const redirect = toValidRedirect(REDIRECT_INPUT.value);
   REDIRECT_SUBMIT.disabled = true;
-  saveRedirect(alias, redirect, (result, err) => {
+  saveRedirect(alias, redirect, (_, err) => {
     if (err) {
       onRedirectSubmitError(err);
     } else {
-      console.log(result);
+      onRedirectSubmitSuccess(alias);
     }
   });
 };
 
+/**
+ * Called after successfulyl submitting an alias.
+ *
+ * @param {string} alias
+ */
+const onRedirectSubmitSuccess = (alias) => {
+  const subdomain = toSubdomain(alias);
+  setPreview(subdomain, true);
+  resetForm();
+  hideElement(SUBDOMAIN_FUTURE);
+  showElement(SUBDOMAIN_CURRENT);
+  hideElement(FORM_STEP_1);
+  showElement(MAKE_ANOTHER_ALIAS);
+};
+
+/**
+ * Called when submitting alias with redirect fails.
+ *
+ * @param {Object} err
+ */
 const onRedirectSubmitError = (err) => {
   REDIRECT_SUBMIT.disabled = true;
   REDIRECT_ERROR.innerHTML = err.message
@@ -218,11 +267,23 @@ const onRedirectSubmitError = (err) => {
   console.error(err);
 };
 
+/**
+ * Called when a user clicks on "Make Another Alias".
+ */
+const onMakeAnotherClick = () => {
+  hideElement(MAKE_ANOTHER_ALIAS);
+  showElement(FORM_STEP_1);
+  setPreview(null, false);
+  hideElement(SUBDOMAIN_CURRENT);
+  showElement(SUBDOMAIN_FUTURE);
+};
+
 // Subscribers
 REDIRECT_INPUT.addEventListener("input", (event) =>
   handleRedirectValue(event.target.value)
 );
 REDIRECT_SUBMIT.addEventListener("click", onRedirectSubmit);
+MAKE_ANOTHER_ALIAS.addEventListener("click", onMakeAnotherClick);
 
 /**
  * ================================
@@ -248,6 +309,18 @@ const setPreview = (subdomain, redirect) => {
   } else {
     SUBDOMAIN_PREVIEW.innerHTML = `<a href="${subdomain}" target="_blank">${subdomain}</a>`;
   }
+};
+
+const resetForm = () => {
+  ALIAS.value = "";
+  ALIAS_INPUT.value = "";
+  ALIAS_INPUT.disabled = false;
+  ALIAS_SUBMIT.disabled = true;
+  showElement(ALIAS_SUBMIT);
+  hideElement(ALIAS_EDIT);
+  hideElement(FORM_STEP_2);
+  REDIRECT_INPUT.value = "";
+  REDIRECT_SUBMIT.disabled = true;
 };
 
 /**
