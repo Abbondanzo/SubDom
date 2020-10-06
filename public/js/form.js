@@ -4,17 +4,19 @@ const SUBDOMAIN = document.getElementById("subdomain");
 const SUBDOMAIN_PREVIEW = document.getElementById("subdomain-preview");
 const SUBDOMAIN_BUTTON = document.getElementById("subdomain-submit");
 
+const toAlias = (value) => {
+  return value.toLowerCase().trim().split(" ").join(".");
+};
+
 const toSubdomain = (value) => {
   if (value === "") {
     return null;
   }
-  const subdomains = value.toLowerCase().trim().split(" ");
-  subdomains.push(BASE_URL.replace(/^https?:\/\//, "").toLowerCase());
-  return subdomains.join(".");
+  const alias = toAlias(value);
+  return `${alias}.${BASE_URL.replace(/^https?:\/\//, "").toLowerCase()}`;
 };
 
-SUBDOMAIN.addEventListener("input", (event) => {
-  const { value } = event.target;
+const handleSubdomainValue = (value) => {
   const subdomain = toSubdomain(value);
   if (subdomain === null) {
     SUBDOMAIN_PREVIEW.innerHTML = "<i>None</i>";
@@ -23,4 +25,16 @@ SUBDOMAIN.addEventListener("input", (event) => {
     SUBDOMAIN_PREVIEW.innerHTML = subdomain;
     SUBDOMAIN_BUTTON.disabled = false;
   }
-});
+};
+
+const onSubdomainSubmit = () => {
+  const alias = toAlias(SUBDOMAIN.value);
+  isAliasUsed(alias, (hasAlias) => {
+    console.log(hasAlias);
+  });
+};
+
+SUBDOMAIN.addEventListener("input", (event) =>
+  handleSubdomainValue(event.target.value)
+);
+SUBDOMAIN_BUTTON.addEventListener("click", onSubdomainSubmit);
