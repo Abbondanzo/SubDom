@@ -21,6 +21,15 @@ body {
   margin-bottom: 0;
 }
 
+/* Ant overrides */
+.ant-form {
+  text-align: left;
+}
+
+.ant-form-large .ant-form-item-label > label {
+  height: auto;
+}
+
 /* Error file (i.e. 404) CSS styling */
 
 .error-container {

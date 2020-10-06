@@ -19,23 +19,38 @@
 
         <div class="ant-divider ant-divider-horizontal" role="separator"></div>
 
-        <div class="ant-row ant-form-item">
-          <div class="ant-form-item-label">
-            <label class="ant-form-item" for="subdomain">Subdomain</label>
-          </div>
-          <div class="ant-form-item-control">
-            <div class="ant-form-item-control-input">
-              <input
-                id="subdomain"
-                class="ant-input"
-                type="text"
-                placeholder="i.e. foo.bar"
-                required=""
-                autofocus=""
-              />
+        <form class="ant-form ant-form-vertical ant-form-large">
+          <div class="ant-row ant-form-item">
+            <div class="ant-col ant-form-item-label">
+              <label class="ant-form-item" for="subdomain">Subdomain</label>
+            </div>
+
+            <div class="ant-col ant-form-item-control">
+              <div class="ant-form-item-control-input">
+                <input
+                  id="subdomain"
+                  class="ant-input ant-input-lg"
+                  type="text"
+                  placeholder="i.e. foo.bar"
+                  required=""
+                  autofocus=""
+                />
+              </div>
             </div>
           </div>
-        </div>
+
+          <div class="ant-row ant-form-item">
+            <div class="ant-col ant-form-item-control">
+              <div class="ant-form-item-control-input">
+                <div class="ant-form-item-control-input-content">
+                  <button type="button" class="ant-btn ant-btn-primary">
+                    <span>Next</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </body>
