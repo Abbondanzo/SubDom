@@ -13,14 +13,22 @@ const DEFAULT_PORT = 4300;
 const VIEW_ENGINE = "ejs";
 const VIEWS_URL = join(dirname(import.meta.url), "views");
 
-export const setup = (
-  { baseUrl, writeToFile, port, initialProxies }: SubDomConfig,
-) => {
+const defaultOptions: Required<SubDomConfig> = {
+  baseUrl: "localhost",
+  port: 4300,
+  useSSL: true,
+  writeToFile: false,
+  initialProxies: {},
+};
+
+export const setup = (userOptions: SubDomConfig) => {
   const app = opine();
+
+  const options: Required<SubDomConfig> = { ...defaultOptions, ...userOptions };
 
   // Use redirect proxy for determining what to do with hosts
   const redirectProxy = new RedirectProxy(
-    { baseUrl, writeToFile, initialProxies: initialProxies || {} },
+    { ...options, onError: console.error },
   );
 
   // Setup view engine
@@ -36,7 +44,7 @@ export const setup = (
   app.use("/", router.getModem());
 
   // Listen
-  port = port || DEFAULT_PORT;
+  const { port } = options;
   console.log(`Listening on port ${port}`);
   app.listen(port);
 };

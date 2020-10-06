@@ -1,7 +1,8 @@
 interface RedirectProxyOptions {
   baseUrl: string;
-  writeToFile?: boolean;
-  initialProxies?: Proxies;
+  useSSL: boolean;
+  writeToFile: boolean;
+  initialProxies: Proxies;
   onError?: ErrorCallback;
 }
 
@@ -13,17 +14,17 @@ type ErrorCallback = (error: any) => void;
 
 export class RedirectProxy {
   private readonly baseUrl: string;
+  private readonly useSSL: boolean;
   private readonly fileName: string | null;
   private readonly proxies: Proxies;
   private readonly onError: ErrorCallback;
 
-  constructor(
-    { baseUrl, writeToFile, initialProxies, onError }: RedirectProxyOptions,
-  ) {
-    this.baseUrl = baseUrl.toLowerCase().replace(/^https?:\/\//, "");
-    this.fileName = writeToFile ? `${this.baseUrl}.config.json` : null;
-    this.proxies = initialProxies || {};
-    this.onError = onError || noop;
+  constructor(options: RedirectProxyOptions) {
+    this.baseUrl = options.baseUrl.toLowerCase().replace(/^https?:\/\//, "");
+    this.useSSL = options.useSSL;
+    this.fileName = options.writeToFile ? `${this.baseUrl}.config.json` : null;
+    this.proxies = options.initialProxies;
+    this.onError = options.onError || noop;
   }
 
   /**
@@ -50,7 +51,7 @@ export class RedirectProxy {
   }
 
   public getBaseUrl(): string {
-    return `https://${this.baseUrl}`;
+    return this.useSSL ? `https://${this.baseUrl}` : `http://${this.baseUrl}`;
   }
 
   public hasAlias(alias: string): boolean {
