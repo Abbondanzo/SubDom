@@ -14,40 +14,82 @@
 
       <div class="card">
         <div class="meta-info">
-          <h4>Your subdomain is:</h4>
-          <h4 id="subdomain-preview"><i>None</i></h4>
+          <h4 id="subdomain-future">Your subdomain will be:</h4>
+          <h3 id="subdomain-current" class="hidden">
+            Success! Your subdomain is:
+          </h3>
+          <h4 id="subdomain-preview"></h4>
+          <input id="alias" type="hidden" />
         </div>
 
         <div class="divider" role="separator"></div>
 
         <form>
-          <div class="form-row">
-            <div class="form-col form-label">
-              <label for="subdomain">Subdomain</label>
+          <div id="form-step-1">
+            <div class="form-row">
+              <div class="form-col form-label">
+                <label for="alias-input" class="required">Alias</label>
+              </div>
+              <div class="form-col">
+                <input
+                  id="alias-input"
+                  type="text"
+                  placeholder="i.e. foo.bar"
+                  autocomplete="off"
+                  required=""
+                  autofocus=""
+                  value=""
+                />
+                <span id="alias-error" class="error-text"></span>
+              </div>
             </div>
-            <div class="form-col">
-              <input
-                id="subdomain"
-                type="text"
-                placeholder="i.e. foo.bar"
-                autocomplete="off"
-                required=""
-                autofocus=""
-                value=""
-              />
+
+            <div class="form-row">
+              <div class="form-col">
+                <button
+                  type="button"
+                  id="alias-submit"
+                  class="btn btn-primary"
+                  disabled=""
+                >
+                  <span>Next</span>
+                </button>
+                <button type="button" id="alias-edit" class="btn hidden">
+                  <span>Edit</span>
+                </button>
+              </div>
             </div>
           </div>
 
-          <div class="form-row">
-            <div class="form-col">
-              <button
-                type="button"
-                id="subdomain-submit"
-                class="btn btn-primary"
-                disabled=""
-              >
-                <span>Next</span>
-              </button>
+          <div id="form-step-2" class="hidden">
+            <div class="form-row">
+              <div class="form-col form-label">
+                <label for="redirect-input" class="required">Redirect</label>
+              </div>
+              <div class="form-col">
+                <input
+                  id="redirect-input"
+                  type="text"
+                  placeholder="i.e. https://cool-website.com"
+                  autocomplete="off"
+                  required=""
+                  value=""
+                />
+                <span id="redirect-error" class="error-text"></span>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-col">
+                <button
+                  type="button"
+                  id="redirect-submit"
+                  class="btn btn-primary"
+                  disabled=""
+                >
+                  <span>Save</span>
+                </button>
+              </div>
             </div>
           </div>
         </form>

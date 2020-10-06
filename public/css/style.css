@@ -60,6 +60,10 @@ a:active {
   color: #096dd9;
 }
 
+.hidden {
+  display: none !important;
+}
+
 /* Index page */
 
 .container {
@@ -114,6 +118,16 @@ form {
   text-align: left;
 }
 
+label.required::before {
+  display: inline-block;
+  margin-right: 4px;
+  color: #ff4d4f;
+  font-size: 14px;
+  font-family: SimSun, sans-serif;
+  line-height: 1;
+  content: "*";
+}
+
 input,
 .btn {
   border-radius: 2px;
@@ -135,7 +149,7 @@ input {
   background-color: #fff;
 }
 
-input:hover {
+input:not([disabled]):hover {
   border-color: #40a9ff;
   border-right-width: 1px !important;
 }
@@ -149,6 +163,17 @@ input:focus {
   border-right-width: 1px !important;
   outline: 0;
   box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+input[disabled] {
+  cursor: not-allowed;
+  background: transparent;
+  opacity: 0.8;
+}
+
+.error-text {
+  font-size: 10px;
+  color: #ff4d4f;
 }
 
 .btn {
