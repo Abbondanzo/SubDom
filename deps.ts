@@ -10,4 +10,5 @@ export {
   NextFunction,
   Request,
   Response,
+  Router as RouterType,
 } from "https://deno.land/x/opine@0.20.2/src/types.ts";
