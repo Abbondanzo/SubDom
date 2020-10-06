@@ -2,14 +2,11 @@
 <html>
   <head>
     <title>SubDom</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.6.6/antd.min.css"
-    />
     <link rel="stylesheet" href="/css/style.css" />
     <script type="application/javascript">
       const BASE_URL = "<%= baseUrl %>";
     </script>
+    <script type="application/javascript" src="/js/request.js"></script>
   </head>
   <body class="container">
     <div>
@@ -21,42 +18,36 @@
           <h4 id="subdomain-preview"><i>None</i></h4>
         </div>
 
-        <div class="ant-divider ant-divider-horizontal" role="separator"></div>
+        <div class="divider" role="separator"></div>
 
-        <form class="ant-form ant-form-vertical ant-form-large">
-          <div class="ant-row ant-form-item">
-            <div class="ant-col ant-form-item-label">
-              <label class="ant-form-item" for="subdomain">Subdomain</label>
+        <form>
+          <div class="form-row">
+            <div class="form-col form-label">
+              <label for="subdomain">Subdomain</label>
             </div>
-
-            <div class="ant-col ant-form-item-control">
-              <div class="ant-form-item-control-input">
-                <input
-                  id="subdomain"
-                  class="ant-input ant-input-lg"
-                  type="text"
-                  placeholder="i.e. foo.bar"
-                  required=""
-                  autofocus=""
-                />
-              </div>
+            <div class="form-col">
+              <input
+                id="subdomain"
+                type="text"
+                placeholder="i.e. foo.bar"
+                autocomplete="off"
+                required=""
+                autofocus=""
+                value=""
+              />
             </div>
           </div>
 
-          <div class="ant-row ant-form-item">
-            <div class="ant-col ant-form-item-control">
-              <div class="ant-form-item-control-input">
-                <div class="ant-form-item-control-input-content">
-                  <button
-                    type="button"
-                    id="subdomain-submit"
-                    class="ant-btn ant-btn-primary"
-                    disabled=""
-                  >
-                    <span>Next</span>
-                  </button>
-                </div>
-              </div>
+          <div class="form-row">
+            <div class="form-col">
+              <button
+                type="button"
+                id="subdomain-submit"
+                class="btn btn-primary"
+                disabled=""
+              >
+                <span>Next</span>
+              </button>
             </div>
           </div>
         </form>
