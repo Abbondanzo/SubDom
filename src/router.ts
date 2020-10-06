@@ -69,7 +69,7 @@ export class AppRouter {
       return next();
     }
     return response.render(
-      "index",
+      "index.ejs",
       { baseUrl: this.redirectProxy.getBaseUrl() },
     );
   };
@@ -82,7 +82,7 @@ export class AppRouter {
    */
   private handle404 = (_: Request, response: Response) => {
     response.setStatus(404).render(
-      "404",
+      "404.ejs",
       { baseUrl: this.redirectProxy.getBaseUrl() },
     );
   };
