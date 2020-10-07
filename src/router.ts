@@ -1,6 +1,5 @@
 import {
   dirname,
-  join,
   NextFunction,
   Request,
   Response,
@@ -9,7 +8,7 @@ import {
 } from "../deps.ts";
 import { RedirectProxy } from "./redirectProxy.ts";
 
-const VIEWS_URL = join(dirname(import.meta.url), "views");
+const VIEWS_URL = dirname(import.meta.url) + "/views";
 console.log(VIEWS_URL);
 console.log(import.meta.url);
 console.log(dirname(import.meta.url));
