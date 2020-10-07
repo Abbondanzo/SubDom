@@ -74,9 +74,8 @@ export class AppRouter {
       return next();
     }
     return response.render(
-      `${VIEWS_URL}/index.ejs`,
+      "index",
       {
-        filename: `${VIEWS_URL}/index.ejs`,
         baseUrl: this.redirectProxy.getBaseUrl(),
       },
     );
@@ -90,9 +89,8 @@ export class AppRouter {
    */
   private handle404 = (_: Request, response: Response) => {
     response.setStatus(404).render(
-      `${VIEWS_URL}/404.ejs`,
+      "404",
       {
-        filename: `${VIEWS_URL}/404.ejs`,
         baseUrl: this.redirectProxy.getBaseUrl(),
       },
     );

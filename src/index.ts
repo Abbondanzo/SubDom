@@ -11,7 +11,7 @@ import { RedirectProxy } from "./redirectProxy.ts";
 import { AppRouter } from "./router.ts";
 
 const VIEW_ENGINE = "ejs";
-const VIEWS_URL = join(dirname(import.meta.url), "views");
+const VIEWS_URL = dirname(import.meta.url) + "/views";
 
 const defaultOptions: Required<SubDomConfig> = {
   baseUrl: "localhost",
