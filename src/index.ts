@@ -1,17 +1,7 @@
-import {
-  dirname,
-  join,
-  json,
-  opine,
-  renderFileToString,
-  serveStatic,
-} from "../deps.ts";
+import { json, opine } from "../deps.ts";
 import { SubDomConfig } from "../mod.ts";
 import { RedirectProxy } from "./redirectProxy.ts";
 import { AppRouter } from "./router.ts";
-
-const VIEW_ENGINE = "ejs";
-const VIEWS_URL = join(dirname(import.meta.url), "views");
 
 const defaultOptions: Required<SubDomConfig> = {
   baseUrl: "localhost",
@@ -33,14 +23,6 @@ export const setup = (userOptions: SubDomConfig) => {
   const redirectProxy = new RedirectProxy(
     { ...options, onError: console.error },
   );
-
-  // Setup view engine
-  app.engine(".ejs", renderFileToString);
-  app.set("view engine", VIEW_ENGINE);
-  app.set("views", VIEWS_URL);
-
-  // Serve static files
-  app.use(serveStatic("public"));
 
   // Configure routes
   const router = new AppRouter(redirectProxy);
