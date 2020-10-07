@@ -5,17 +5,17 @@ interface Props {
   isSuccessful: boolean;
 }
 
-const Preview = ({ subdomain, isSuccessful }: Props) => {
-  if (isSuccessful) {
-    return <a href={subdomain}>{subdomain}</a>;
-  }
-  if (subdomain) {
-    return <span>{subdomain}</span>;
-  }
-  return <i>None</i>;
-};
+export const Header = ({ subdomain, isSuccessful }: Props) => {
+  const Preview = ({ subdomain, isSuccessful }: Props) => {
+    if (isSuccessful) {
+      return <a href={subdomain}>{subdomain}</a>;
+    }
+    if (subdomain) {
+      return <span>{subdomain}</span>;
+    }
+    return <i>None</i>;
+  };
 
-const Header = ({ subdomain, isSuccessful }: Props) => {
   return (
     <>
       <h1 className="text-center">SubDom</h1>

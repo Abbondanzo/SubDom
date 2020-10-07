@@ -8,7 +8,6 @@ import {
 import App from "./App.tsx";
 
 const browserBundlePath = "/browser.ts";
-const { default: js } = await import("./client.tsx");
 
 const getErrorPage = (baseUrl: string) =>
   `
@@ -80,19 +79,18 @@ const getErrorPage = (baseUrl: string) =>
  * 
  * @param baseUrl URL of the application this is getting served on
  */
-export const setupReactServer = (baseUrl: string) => {
+export const setupReactServer = async (baseUrl: string) => {
   const router = new Router();
 
-  // const js = `
-  //   const App = ${App};
-  //   const baseUrl = "${baseUrl}";
-  //   ReactDOM.hydrate(React.createElement(App, { baseUrl, isServer: false }), document.getElementById("react-root"));`;
+  const { default: App } = await import("./App.tsx");
+  const { default: Header } = await import("./Header.tsx");
 
-  // const [diagnostics, js] = await Deno.bundle(
-  //   "./examples/react/client.tsx",
-  //   undefined,
-  //   { lib: ["dom", "dom.iterable", "esnext"] },
-  // );
+  const js = `
+    const Header = ${Header};
+    const App = ${App};
+    const baseUrl = "${baseUrl}";
+    ReactDOM.hydrate(React.createElement(App, { baseUrl, isServer: false }), document.getElementById("react-root"));`;
+
   const ssrRender = ReactDOMServer.renderToString(
     <App baseUrl={baseUrl} isServer />,
   );

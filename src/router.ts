@@ -19,11 +19,16 @@ export class AppRouter {
     this.router.route("*").get(this.handleRedirect);
     this.router.route("/api/check/:alias").get(this.handleAliasCheck);
     this.router.route("/api/submit").post(this.handleRedirectSubmit);
-    this.router.use(setupReactServer(this.redirectProxy.getBaseUrl()));
+    this.setupReact();
   }
 
   public getModem() {
     return this.router;
+  }
+
+  private async setupReact() {
+    const reactRouter = await setupReactServer(this.redirectProxy.getBaseUrl());
+    this.router.use(reactRouter);
   }
 
   /**

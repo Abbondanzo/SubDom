@@ -9,14 +9,6 @@ interface Props {
 const App = ({ baseUrl, isServer }: Props) => {
   const [count, setCount] = React.useState(0);
 
-  // if (isServer) {
-  //   return <div className="container">
-  //     <div className="contents">
-  //       Loading...
-  //     </div>
-  //   </div>;
-  // }
-
   return (
     <div className="container">
       <div className="contents">
