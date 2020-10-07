@@ -1,12 +1,15 @@
 import {
+  dirname,
+  join,
   NextFunction,
   Request,
   Response,
   Router,
   RouterType,
 } from "../deps.ts";
-
 import { RedirectProxy } from "./redirectProxy.ts";
+
+const VIEWS_URL = join(dirname(import.meta.url), "views");
 
 export class AppRouter {
   private readonly redirectProxy: RedirectProxy;
@@ -70,7 +73,10 @@ export class AppRouter {
     }
     return response.render(
       "index",
-      { baseUrl: this.redirectProxy.getBaseUrl() },
+      {
+        filename: `${VIEWS_URL}/index.ejs`,
+        baseUrl: this.redirectProxy.getBaseUrl(),
+      },
     );
   };
 
@@ -83,7 +89,10 @@ export class AppRouter {
   private handle404 = (_: Request, response: Response) => {
     response.setStatus(404).render(
       "404",
-      { baseUrl: this.redirectProxy.getBaseUrl() },
+      {
+        filename: `${VIEWS_URL}/404.ejs`,
+        baseUrl: this.redirectProxy.getBaseUrl(),
+      },
     );
   };
 
