@@ -1,15 +1,12 @@
 import {
-  dirname,
-  join,
   NextFunction,
   Request,
   Response,
   Router,
   RouterType,
 } from "../deps.ts";
+import { setupReactServer } from "./components/server.tsx";
 import { RedirectProxy } from "./redirectProxy.ts";
-
-const VIEWS_URL = join(dirname(import.meta.url), "views");
 
 export class AppRouter {
   private readonly redirectProxy: RedirectProxy;
@@ -22,8 +19,7 @@ export class AppRouter {
     this.router.route("*").get(this.handleRedirect);
     this.router.route("/api/check/:alias").get(this.handleAliasCheck);
     this.router.route("/api/submit").post(this.handleRedirectSubmit);
-    this.router.route("/").get(this.handleIndex);
-    this.router.route("*").get(this.handle404);
+    this.router.use(setupReactServer(this.redirectProxy.getBaseUrl()));
   }
 
   public getModem() {
@@ -50,50 +46,6 @@ export class AppRouter {
     } else {
       return next();
     }
-  };
-
-  /**
-   * Serve the HTML form you'd use to set subdomains. 
-   * 
-   * @param request 
-   * @param response 
-   * @param next called if the hostname does not match the configured base URL
-   */
-  private handleIndex = (
-    request: Request,
-    response: Response,
-    next: NextFunction,
-  ) => {
-    const host = request.headers.get("Host") || "";
-    if (
-      !this.redirectProxy.matchesBaseUrl(host) ||
-      request.originalUrl !== "/"
-    ) {
-      return next();
-    }
-    return response.render(
-      "index",
-      {
-        filename: `${VIEWS_URL}/index.ejs`,
-        baseUrl: this.redirectProxy.getBaseUrl(),
-      },
-    );
-  };
-
-  /**
-   * Handle "unhandled" application routes by serving a simple 404 page with a link to index.
-   * 
-   * @param _ request
-   * @param response write a 404 body to this response
-   */
-  private handle404 = (_: Request, response: Response) => {
-    response.setStatus(404).render(
-      "404",
-      {
-        filename: `${VIEWS_URL}/404.ejs`,
-        baseUrl: this.redirectProxy.getBaseUrl(),
-      },
-    );
   };
 
   /**
