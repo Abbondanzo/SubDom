@@ -11,6 +11,8 @@ import { RedirectProxy } from "./redirectProxy.ts";
 
 const VIEWS_URL = join(dirname(import.meta.url), "views");
 console.log(VIEWS_URL);
+console.log(import.meta.url);
+console.log(dirname(import.meta.url));
 
 export class AppRouter {
   private readonly redirectProxy: RedirectProxy;
