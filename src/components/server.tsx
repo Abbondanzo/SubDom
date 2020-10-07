@@ -55,7 +55,7 @@ const getErrorPage = (baseUrl: string) =>
  *   - Before you call me a dumba** for having already done this to some extent (see above), I 
  *     found this happy medium where I don't serve 900TB of React on error pages. You're welcome
  * - Fetch the template based on how it resolves, checking whether or not the path is relative, and
- *   caching it in memory
+ *   caching it in memory.
  *   - This actually works! I'm not ashamed to admit this, but I was pleasantly surprised. It also 
  *     fits some oddly shaped explanation of how Deno works too. Then my power went out while I was
  *     experimenting with this solution and I took that as a sign from our Lord and savior Mark
@@ -63,6 +63,8 @@ const getErrorPage = (baseUrl: string) =>
  *   - I wanted to experiment with an even safer version of this, where the file would be 
  *     downloaded rather than just cached, but I realized that this project is a joke and I would 
  *     not get those hours back.
+ * - Not serve web pages.
+ *   - Job security.
  * - Bow down to the almighty React.
  *   - To be honest, I thought my state management looked like a tangled ball of yarn, whereby I 
  *     made one change and the whole thing blows up in my face. It's stupid to try and emulate 
@@ -73,7 +75,7 @@ const getErrorPage = (baseUrl: string) =>
  *       life.
  *     - "You know you can write forms without making updates to the page?"
  *     - How else will I get this project to the front page of HN? It has to look flashy and only
- *       consume 10% of my available screen real estate.
+ *       consume 10% of my available screen real estate. You can't have one without the other.
  * 
  * @param baseUrl URL of the application this is getting served on
  */
