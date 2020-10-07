@@ -5,9 +5,10 @@ import {
   Response,
   Router,
 } from "../../deps.ts";
+import App from "./App.tsx";
 
-const browserBundlePath = "/browser.js";
-const { default: App } = await import("./App.tsx");
+const browserBundlePath = "/browser.ts";
+const { default: js } = await import("./client.tsx");
 
 const getErrorPage = (baseUrl: string) =>
   `
@@ -82,21 +83,29 @@ const getErrorPage = (baseUrl: string) =>
 export const setupReactServer = (baseUrl: string) => {
   const router = new Router();
 
-  const js = `
-    import React from "https://dev.jspm.io/react@16.13.1";
-    import ReactDOM from "https://dev.jspm.io/react-dom@16.13.1";
-    const App = ${App};
-    ReactDOM.hydrate(React.createElement(App), document.getElementById("react-root"));`;
+  // const js = `
+  //   const App = ${App};
+  //   const baseUrl = "${baseUrl}";
+  //   ReactDOM.hydrate(React.createElement(App, { baseUrl, isServer: false }), document.getElementById("react-root"));`;
 
+  // const [diagnostics, js] = await Deno.bundle(
+  //   "./examples/react/client.tsx",
+  //   undefined,
+  //   { lib: ["dom", "dom.iterable", "esnext"] },
+  // );
+  const ssrRender = ReactDOMServer.renderToString(
+    <App baseUrl={baseUrl} isServer />,
+  );
   const html = `
     <html>
       <head>
-        <script type="module" src="${browserBundlePath}"></script>  
+        <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+        <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+        <script type="module" src="${browserBundlePath}"></script>
+        <link rel="stylesheet" href="/css/style.css" />
       </head>
       <body>
-        <div id="react-root">
-          ${(ReactDOMServer as any).renderToString(<App />)}
-        </div>
+        <div id="react-root">${ssrRender}</div>
       </body>
     </html>`;
 

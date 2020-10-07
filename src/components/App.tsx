@@ -1,13 +1,29 @@
 import { React } from "../../deps.ts";
+import Header from "./Header.tsx";
 
-const App = () => {
+interface Props {
+  baseUrl: string;
+  isServer: boolean;
+}
+
+const App = ({ baseUrl, isServer }: Props) => {
   const [count, setCount] = React.useState(0);
 
+  // if (isServer) {
+  //   return <div className="container">
+  //     <div className="contents">
+  //       Loading...
+  //     </div>
+  //   </div>;
+  // }
+
   return (
-    <div>
-      <h1>Hello DenoLand!</h1>
-      <button onClick={() => setCount(count + 1)}>Click the 🦕</button>
-      <p>You clicked the 🦕 {count} times</p>
+    <div className="container">
+      <div className="contents">
+        <Header subdomain={"abc"} isSuccessful={false} />
+        <button onClick={() => setCount(count + 1)}>Click the 🦕</button>
+        <p>You clicked the 🦕 {count} times</p>
+      </div>
     </div>
   );
 };
