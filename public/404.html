@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>404 - Redirect Not Found</title>
+    <script type="application/javascript" src="/constants.js"></script>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body class="error-container">
+    <div>
+      <h1>404</h1>
+      <p>
+        I'm afraid there's nothing here, but maybe you can
+        <a id="link" href="#">change that</a>.
+      </p>
+    </div>
+  </body>
+  <script type="application/javascript">
+    console.assert(
+      Boolean(BASE_URL),
+      "Global variable BASE_URL is not defined"
+    );
+    document.getElementById("link").href = BASE_URL;
+  </script>
+</html>
