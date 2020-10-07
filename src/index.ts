@@ -9,6 +9,7 @@ import {
 import { SubDomConfig } from "../mod.ts";
 import { RedirectProxy } from "./redirectProxy.ts";
 import { AppRouter } from "./router.ts";
+import { renderApp } from "./components/server.ts";
 
 const VIEW_ENGINE = "ejs";
 const VIEWS_URL = join(dirname(import.meta.url), "views");
@@ -23,6 +24,8 @@ const defaultOptions: Required<SubDomConfig> = {
 
 export const setup = (userOptions: SubDomConfig) => {
   const app = opine();
+
+  console.log(renderApp());
 
   // Use JSON body-parser for parsing requests
   app.use(json());
