@@ -35,9 +35,9 @@ export const setup = (userOptions: SubDomConfig) => {
   );
 
   // Setup view engine
+  app.engine(".ejs", renderFileToString);
   app.set("view engine", VIEW_ENGINE);
   app.set("views", VIEWS_URL);
-  app.engine(".ejs", renderFileToString);
 
   // Serve static files
   app.use(serveStatic("public"));
