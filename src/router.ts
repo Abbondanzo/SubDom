@@ -10,6 +10,7 @@ import {
 import { RedirectProxy } from "./redirectProxy.ts";
 
 const VIEWS_URL = join(dirname(import.meta.url), "views");
+console.log(VIEWS_URL);
 
 export class AppRouter {
   private readonly redirectProxy: RedirectProxy;
@@ -72,7 +73,7 @@ export class AppRouter {
       return next();
     }
     return response.render(
-      "index",
+      `${VIEWS_URL}/index.ejs`,
       {
         filename: `${VIEWS_URL}/index.ejs`,
         baseUrl: this.redirectProxy.getBaseUrl(),
@@ -88,7 +89,7 @@ export class AppRouter {
    */
   private handle404 = (_: Request, response: Response) => {
     response.setStatus(404).render(
-      "404",
+      `${VIEWS_URL}/404.ejs`,
       {
         filename: `${VIEWS_URL}/404.ejs`,
         baseUrl: this.redirectProxy.getBaseUrl(),
