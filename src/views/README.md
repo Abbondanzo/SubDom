@@ -108,6 +108,49 @@ There we have it. I have a module script (which means support for imports) and a
 
 But there's one important line that makes all the difference and that is:
 
-> `const { default: App } = await import("./App.tsx");`
+> `const App = ${App};`
 
-When you call this method
+When you declare this constant, it resolves as the exported value of `App.tsx` only. This means that the referenced `Header` component is only available inside the context of the Opine server that you are running. Take a closer look at the outputted value and you can clearly see why:
+
+```javascript
+const App = ({ baseUrl, isServer }) => {
+  const [count, setCount] = React.useState(0);
+  return React.createElement(
+    "div",
+    { className: "container" },
+    React.createElement(
+      "div",
+      { className: "contents" },
+      React.createElement(Header, { subdomain: "abc", isSuccessful: false }),
+      React.createElement(
+        "button",
+        { onClick: () => setCount(count + 1) },
+        "Click the \uD83E\uDD95"
+      ),
+      React.createElement(
+        "p",
+        null,
+        "You clicked the \uD83E\uDD95 ",
+        count,
+        " times"
+      )
+    )
+  );
+};
+```
+
+Here, `React.createElement` is referencing the variable name `Header` but we have not declared that variable in the context of the browser. We still have access to that value on the server and can easily just add another line to our `js` variable as follows:
+
+```typescript
+`const Header = ${Header};`;
+```
+
+As we add more and more components, we have to keep doing this each time. And we have to ensure that components are imported in the correct order (`Header` needs to be declared before it is referenced in the `App` declaration).
+
+Perhaps one can write a linting rule to enforce that every component export its own version of `js` whereby the string just contains references to the declared components. You could easily concatenate strings together of children and build this odd bundle on the fly, but that is really inefficient. Alternatively, you can declare components inline, as I have done with the `Preview` component inside the `Header` one.
+
+For a project of this magnitude, this could work without much of a problem at all. Obviously, this is not friendly for a production environment (but this is not the purpose of Deno, duh).
+
+# Conclusion
+
+So, there you have it. Some lazy attempts at serving client-side code using a Deno _library_. I'm absolutely certain this will improve as the community matures, but I've already sunk too much time into this side project and I'm happy with the current state. This whole project was an exploration at best, and should be treated as such. If you decide to hoist this into your own project, godspeed.
