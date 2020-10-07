@@ -1,5 +1,4 @@
 import {
-  dirname,
   NextFunction,
   Request,
   Response,
@@ -7,11 +6,7 @@ import {
   RouterType,
 } from "../deps.ts";
 import { RedirectProxy } from "./redirectProxy.ts";
-
-const VIEWS_URL = dirname(import.meta.url) + "/views";
-console.log(VIEWS_URL);
-console.log(import.meta.url);
-console.log(dirname(import.meta.url));
+import { renderIndex } from "./views/renderer.ts";
 
 export class AppRouter {
   private readonly redirectProxy: RedirectProxy;
@@ -61,7 +56,7 @@ export class AppRouter {
    * @param response 
    * @param next called if the hostname does not match the configured base URL
    */
-  private handleIndex = (
+  private handleIndex = async (
     request: Request,
     response: Response,
     next: NextFunction,
@@ -73,12 +68,10 @@ export class AppRouter {
     ) {
       return next();
     }
-    return response.render(
-      "index.ejs",
-      {
-        baseUrl: this.redirectProxy.getBaseUrl(),
-      },
-    );
+    const html = await renderIndex(this.redirectProxy.getBaseUrl());
+    // response.send({})
+
+    return response.send(html);
   };
 
   /**
