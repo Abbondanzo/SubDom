@@ -307,7 +307,7 @@ const setPreview = (subdomain, redirect) => {
   } else if (!redirect) {
     SUBDOMAIN_PREVIEW.innerHTML = subdomain;
   } else {
-    SUBDOMAIN_PREVIEW.innerHTML = `<a href="${subdomain}" target="_blank">${subdomain}</a>`;
+    SUBDOMAIN_PREVIEW.innerHTML = `<a href="https://${subdomain}" target="_blank">${subdomain}</a>`;
   }
 };
 
