@@ -1,15 +1,16 @@
 import {
-  dirname,
   join,
   NextFunction,
   Request,
   Response,
   Router,
   RouterType,
+  serveStatic,
 } from "../deps.ts";
 import { RedirectProxy } from "./redirectProxy.ts";
 
-const VIEWS_URL = join(dirname(import.meta.url), "views");
+const SCRIPT_PATH = "/constants.js";
+const PUBLIC_ASSETS = "public";
 
 export class AppRouter {
   private readonly redirectProxy: RedirectProxy;
@@ -19,6 +20,8 @@ export class AppRouter {
     this.redirectProxy = redirectProxy;
     this.router = new Router();
 
+    this.router.route("*").get(serveStatic(PUBLIC_ASSETS));
+    this.router.route(SCRIPT_PATH).get(this.handleServerScript);
     this.router.route("*").get(this.handleRedirect);
     this.router.route("/api/check/:alias").get(this.handleAliasCheck);
     this.router.route("/api/submit").post(this.handleRedirectSubmit);
@@ -29,6 +32,11 @@ export class AppRouter {
   public getModem() {
     return this.router;
   }
+
+  private handleServerScript = (_: Request, response: Response) => {
+    const js = `const BASE_URL="${this.redirectProxy.getBaseUrl()}";`;
+    return response.type("application/javascript").send(js);
+  };
 
   /**
  * Perform redirect if the determined subdomain is handled by this application.
@@ -71,13 +79,8 @@ export class AppRouter {
     ) {
       return next();
     }
-    return response.render(
-      "index",
-      {
-        filename: `${VIEWS_URL}/index.ejs`,
-        baseUrl: this.redirectProxy.getBaseUrl(),
-      },
-    );
+    const fullPath = join(PUBLIC_ASSETS, "index.html");
+    return response.sendFile(fullPath);
   };
 
   /**
@@ -87,13 +90,8 @@ export class AppRouter {
    * @param response write a 404 body to this response
    */
   private handle404 = (_: Request, response: Response) => {
-    response.setStatus(404).render(
-      "404",
-      {
-        filename: `${VIEWS_URL}/404.ejs`,
-        baseUrl: this.redirectProxy.getBaseUrl(),
-      },
-    );
+    const fullPath = join(PUBLIC_ASSETS, "404.html");
+    return response.sendFile(fullPath);
   };
 
   /**
